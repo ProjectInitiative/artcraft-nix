@@ -26,6 +26,8 @@
   pkg-config,
   autoPatchelfHook,
   makeWrapper,
+  cmake,
+  perl,
   xorg,
   alsa-lib,
   dbus,
@@ -102,10 +104,23 @@ craftRustPlatform.buildRustPackage {
     )
   );
 
+  # nixpkgs' cargo-setup-hook (2026-11) force-exports AWS_LC_SYS_USE_SYSTEM=1,
+  # OPENSSL_NO_VENDOR=1, ZSTD_SYS_USE_PKG_CONFIG=1, ... pushing every -sys
+  # crate onto system libs. Our pinned-source builds vendor them all — unset
+  # the forced vars so the vendored builds run (preBuild runs after the
+  # hook's preConfigure exports).
+  preBuild = ''
+    unset AWS_LC_SYS_USE_SYSTEM OPENSSL_NO_VENDOR ZSTD_SYS_USE_PKG_CONFIG \
+      LIBZ_SYS_STATIC LIBSQLITE3_SYS_USE_PKG_CONFIG LIBGIT2_NO_VENDOR \
+      SODIUM_USE_PKG_CONFIG RUSTONIG_SYSTEM_LIBONIG LIBSSH2_SYS_USE_PKG_CONFIG
+  '';
+
   nativeBuildInputs = [
     pkg-config
     autoPatchelfHook
     makeWrapper
+    cmake # aws-lc-sys source build (vendored)
+    perl # aws-lc assembly generation
   ];
   buildInputs = [
     alsa-lib

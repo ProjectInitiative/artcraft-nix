@@ -5,7 +5,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # Official rust toolchains: craft-* crates need cargo >= 1.96; 1.99.0 is
     # what upstream CI uses. (dotfiles' nixpkgs-26.05 cargo is 1.95.)
+    # follows: rust-overlay's internal nixpkgs is only used by its own repo
+    # outputs (never consumed here) — reuse ours instead of a duplicate pin.
     rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =

@@ -9,6 +9,7 @@
   fetchFromGitHub,
   autoPatchelfHook,
   makeWrapper,
+  pkg-config,
   xorg,
   alsa-lib,
   dbus,
@@ -16,6 +17,7 @@
   vulkan-loader,
   wayland,
   libxkbcommon,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -49,10 +51,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
+    pkg-config
   ];
   buildInputs = [
     alsa-lib
     stdenv.cc.cc.lib
+    zstd
   ];
   runtimeDependencies = [
     dbus.lib
