@@ -10,7 +10,13 @@
   autoPatchelfHook,
   makeWrapper,
   pkg-config,
-  xorg,
+  libx11,
+  libxcb,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxext,
   alsa-lib,
   dbus,
   libGL,
@@ -64,13 +70,13 @@ rustPlatform.buildRustPackage rec {
     vulkan-loader
     wayland
     libxkbcommon
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXext
+    libx11
+    libxcb
+    libxcursor
+    libxi
+    libxrandr
+    libxrender
+    libxext
   ];
 
   postInstall = ''

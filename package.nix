@@ -28,7 +28,13 @@
   makeWrapper,
   cmake,
   perl,
-  xorg,
+  libx11,
+  libxcb,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxext,
   alsa-lib,
   dbus,
   libGL,
@@ -53,21 +59,6 @@ let
     rustc = rust-bin.stable."1.99.0".minimal;
   };
 
-  # dlopen()ed runtime stack. dbus.lib (not dbus.out) carries libdbus-1.
-  runtimeLibs = [
-    dbus.lib
-    libGL
-    vulkan-loader
-    wayland
-    libxkbcommon
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXext
-  ];
 in
 craftRustPlatform.buildRustPackage {
   pname = name;
@@ -126,7 +117,20 @@ craftRustPlatform.buildRustPackage {
     alsa-lib
     stdenv.cc.cc.lib
   ];
-  runtimeDependencies = runtimeLibs;
+  runtimeDependencies = [
+    dbus.lib
+    libGL
+    vulkan-loader
+    wayland
+    libxkbcommon
+    libx11
+    libxcb
+    libxcursor
+    libxi
+    libxrandr
+    libxrender
+    libxext
+  ];
 
   # Desktop entry, mime XML, and the pre-rendered hicolor icons all ship in
   # the source tree (packaging/linux + assets/app-icon) — install them so the
